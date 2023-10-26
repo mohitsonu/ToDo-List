@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>To Do List</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon">
+</head>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(function (checkbox) {
+      const itemId = checkbox.getAttribute('data-itemid');
+      const isChecked = localStorage.getItem(itemId) === 'true';
+      checkbox.checked = isChecked;
+
+      checkbox.addEventListener('change', function () {
+        const itemId = this.getAttribute('data-itemid');
+        localStorage.setItem(itemId, this.checked);
+      });
+    });
+  });
+</script>
+
+<body>
+
+  <div class="box" id="heading">
+    <h1>
+      <%= listTitle %>
+    </h1>
+  </div>
+
+<div class="box">
+    <% newListItems.forEach(function(item) { %>
+      <div class="item">
+        <input class="checkbox" type="checkbox" data-itemid="<%= item._id %>" <%= item.completed ? 'checked' : '' %>>
+        <p class="task">
+          <%= item.name %>
+        </p>
+        <!-- Here's the modified delete button -->
+        <form class="delete-form" action="/delete" method="post">
+          <input type="hidden" name="delete" value="<%= item._id %>">
+          <button class="delete" type="submit">
+            <img src="/images/d.png" height="50px" width="50px" alt="d" />
+
+          </button>
+        </form>
+      </div>
+    <% }) %>
+
+    <form class="item" action="/" method="post">
+      <input type="text" name="newItem" placeholder="Add Task" autocomplete="off">
+      <button class="addtask" type="submit" name="list">+</button>
+    </form>
+  </div>
+
+</body>
+
+<footer>
+  <b>Designed by MohitSonu</b>
+</footer>
+
+</html>
